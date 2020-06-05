@@ -44,7 +44,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// endpoint to Get all comments
+// endpoint to Get all todos
 app.get('/todos', (req, res) => {
   db.collection(collName).find({}).toArray(function(err, result) {
     if (err) throw err;
@@ -74,7 +74,7 @@ app.get('/gettodo/:data', (req, res, next) => {
 });
 
 
-//Endpoint to add a comment
+//Endpoint to add a todo
 app.post('/addtodo', (req, res) => {
   // Insert a single document
   let todo = {
@@ -87,13 +87,13 @@ app.post('/addtodo', (req, res) => {
       return res.status(201).send({
         status_code: 200,
         message: 'ToDo added successfully',
-        todos: result
+        todo
       });
     })
     .catch(error => console.error(error));
 });
 
-//Endpoint to Delete a single comment
+//Endpoint to Delete a single todo
 app.post('/deletetodo/:data', (req, res) => {
   const data = req.params.data;
   console.log(data);

@@ -1,5 +1,5 @@
 # Project 5 Repo
-[Github userpage](https://octaviolima.github.io/)
+[Project 5 Page](https://github.com/UO-CIT/project-5-octaviolima/)
 
 ## 281 Project 5 Learning Outcomes
 

@@ -1,10 +1,7 @@
 //jshint esversion: 6
 
 let controller = function() {
-  //load comments from db when page loads
-  //if (localStorage.getItem("commentsList")) {
-  //  $(".comments").html(localStorage.getItem("commentsList"));
-  //}
+
 
   $.ajax({
     url: "http://localhost:8888/todos",
@@ -14,7 +11,7 @@ let controller = function() {
     //console.log(res.comments[0]._id + " " + res.comments[0].data)
     res.todos.forEach((todo) => {
       pElem = $("<p>").html(todo.data)
-      $(".todos").append(pElem);
+      $(".comments").append(pElem);
     })
   });
 
@@ -22,13 +19,13 @@ let controller = function() {
 
     let $new_todo, content;
 
-    if ($(".todo-input input").val() !== "") {
-      content = $(".todo-input input").val();
+    if ($(".comment-input input").val() !== "") {
+      content = $(".comment-input input").val();
       $new_todo = $("<p>").text(content);
 
-      $(".todos").append($new_todo);
+      $(".comments").append($new_todo);
 
-      $(".todo-input input").val("");
+      $(".comment-input input").val("");
 
       //add todo to db
       $.ajax({
@@ -44,16 +41,16 @@ let controller = function() {
     }
   };
 
-  $(".todo-input button").on("click", function(event) {
-    addTodoFromInputBox();
-  });
-
-  $(".todo-input input").on("keypress", function(event) {
-    if (event.keyCode === 13) {
+  $(".comment-input button").on("click", function(event) {
       addTodoFromInputBox();
-    }
-  });
-};
+    });
+
+    $(".comment-input input").on("keypress", function(event) {
+      if (event.keyCode === 13) {
+        addTodoFromInputBox();
+      }
+    });
+  };
 
 let deleteTodo = () => {
   //delete a todo from db
@@ -89,8 +86,15 @@ let getTodo = () => {
 }
 
 let deleteAll = () => {
-  //delete all comments from db
-//  localStorage.removeItem("commentsList")
+  let content = $("#deleteAll").val();
+  $.ajax({
+      method: "POST",
+      url: "http://localhost:8888/deleteall/" + content
+    })
+    .done(function(msg) {
+      console.log("Todo deleted: " + msg);
+    });
+
   window.location.reload();
 }
 
