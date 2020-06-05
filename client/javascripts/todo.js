@@ -15,19 +15,19 @@ let controller = function() {
     })
   });
 
-  let addTodoFromInputBox = function() {
-
-    let $new_todo, content;
+  let addCommentFromInputBox = function() {
+    //Semmy uses "$" to name variables that will contain jQuery objects
+    let $todo, content;
 
     if ($(".comment-input input").val() !== "") {
       content = $(".comment-input input").val();
       $new_todo = $("<p>").text(content);
-
+      //$new_comment.hide();
       $(".comments").append($new_todo);
-
+      //$new_comment.fadeIn();
       $(".comment-input input").val("");
 
-      //add todo to db
+      //add comment to db
       $.ajax({
           method: "POST",
           url: "http://localhost:8888/addtodo",
@@ -42,25 +42,25 @@ let controller = function() {
   };
 
   $(".comment-input button").on("click", function(event) {
-      addTodoFromInputBox();
-    });
+    addCommentFromInputBox();
+  });
 
-    $(".comment-input input").on("keypress", function(event) {
-      if (event.keyCode === 13) {
-        addTodoFromInputBox();
-      }
-    });
-  };
+  $(".comment-input input").on("keypress", function(event) {
+    if (event.keyCode === 13) {
+      addCommentFromInputBox();
+    }
+  });
+};
 
-let deleteTodo = () => {
-  //delete a todo from db
+let deleteToDo = () => {
+  //delete a comment from db
   let content = $("#deleteOne").val();
   $.ajax({
       method: "POST",
       url: "http://localhost:8888/deletetodo/" + content
     })
     .done(function(msg) {
-      console.log("Todo deleted: " + msg);
+      console.log("Comment deleted: " + msg);
     });
 
   window.location.reload();
@@ -70,15 +70,15 @@ let getTodo = () => {
   //clear outDiv
   $("#outDiv").html("");
   let pElem;
-  //retrieve a todo from db
+  //retrieve a comment from db
   let content = $("#getOne").val();
   $.ajax({
       method: "GET",
       url: "http://localhost:8888/gettodo/" + content
     })
     .done(function(msg) {
-      console.log("Todo retrieved: " + msg.message.data);
-      pElem = $("<p>").html("Todo Retrieved: " + msg.message.data)
+      console.log("Comment retrieved: " + msg.message.data);
+      pElem = $("<p>").html("To do Retrieved: " + msg.message.data)
       $("#outDiv").append(pElem);
     });
 
@@ -86,15 +86,18 @@ let getTodo = () => {
 }
 
 let deleteAll = () => {
+  //delete all comments from db
   let content = $("#deleteAll").val();
   $.ajax({
-      method: "POST",
-      url: "http://localhost:8888/deleteall/" + content
-    })
-    .done(function(msg) {
-      console.log("Todo deleted: " + msg);
-    });
+    method: "POST",
+    url: "http://localhost:8888/deleteall/",
+  })
+  .done(function(msg) {
+    console.log("everything deleted: " + msg);
+  });
 
+window.location.reload();
+  localStorage.removeItem("commentsList")
   window.location.reload();
 }
 
@@ -105,7 +108,7 @@ $(document).ready(() => {
   btn03 = document.querySelectorAll('button')[3];
   btn03.addEventListener('click', deleteAll);
   btn02 = document.querySelectorAll('button')[2];
-  btn02.addEventListener('click', deleteTodo);
+  btn02.addEventListener('click', deleteToDo);
   btn01 = document.querySelectorAll('button')[1];
   btn01.addEventListener('click', getTodo);
   controller();

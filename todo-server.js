@@ -20,13 +20,13 @@ let db, col, key = 0;
 MongoClient.connect(dbURL, {
   useNewUrlParser: true
 }, (err, client) => {
-  if (err) return console.log(err);
+  if (err) return console.log(err)
   // Storing a reference to the database so you can use it later
   db = client.db(dbName);
   col = db.collection(collName);
-  console.log(`Connected MongoDB: ${dbURL}`);
-  console.log(`Database: ${dbName}`);
-});
+  console.log(`Connected MongoDB: ${dbURL}`)
+  console.log(`Database: ${dbName}`)
+})
 
 //if the client directory contains an "index.html" web page
 //  it will be displayed as the default document
@@ -53,8 +53,8 @@ app.get('/todos', (req, res) => {
       success: 'true',
       message: 'todos retrieved successfully',
       todos: result
-    });
-  });
+    })
+  })
 });
 
 //endpoint to get a single comment
@@ -68,35 +68,35 @@ app.get('/gettodo/:data', (req, res, next) => {
     console.log(result);
     res.status(200).send({
       status_code: 200,
-      message: ((result) ? result : 'todo not found')
-    });
+      message: ((result) ? result : 'to do not found')
+    })
   });
 });
 
 
-//Endpoint to add a todo
+//Endpoint to add a comment
 app.post('/addtodo', (req, res) => {
   // Insert a single document
   let todo = {
     data: req.body.data
-  };
+  }
 
   db.collection(collName).insertOne(todo)
     .then(result => {
-      console.log(`record inserted ${result}`);
+      console.log(`record inserted ${result}`)
       return res.status(201).send({
         status_code: 200,
-        message: 'ToDo added successfully',
+        message: 'todo added successfully',
         todo
-      });
+      })
     })
-    .catch(error => console.error(error));
-});
+    .catch(error => console.error(error))
+})
 
 //Endpoint to Delete a single todo
 app.post('/deletetodo/:data', (req, res) => {
   const data = req.params.data;
-  console.log(data);
+  console.log(data)
   db.collection(collName).deleteOne({
     "data": data
   }, function(err, obj) {
@@ -108,11 +108,11 @@ app.post('/deletetodo/:data', (req, res) => {
   return res.status(200).send({
     status_code: 200,
     message: "todo deleted",
-  });
+  })
 });
 
 //Endpoint to Delete all tel numbers
-app.delete('/deletenums', (req, res) => {
+app.delete('/deleteall', (req, res) => {
   db.collection(collName).deleteMany({}, function(err, obj) {
     if (err) throw err;
     //number of documents deleted
@@ -121,8 +121,8 @@ app.delete('/deletenums', (req, res) => {
 
   return res.status(200).send({
     status_code: 200,
-    message: "phonebook collection is empty"
-  });
+    message: "todos collection is empty"
+  })
 });
 
 // start server
